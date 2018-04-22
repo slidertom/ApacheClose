@@ -9,8 +9,14 @@ AppClose direct usage examples:
 where 
   1234 - process pid
   c:\path\app.pid - contains 1234
+*************************************************************************
+Usage sample with the Apache.
+Running Apache as a Console Application 
+httpd.exe -k shutdown 
+httpd.exe -k restart 
+don't work and in this case you can use this small utility
+to stop Apache process correctly.
 
-usage sample with the Apache:
 folder structure:
 /bin/httpd.exe
 /bin/...
@@ -20,3 +26,4 @@ folder structure:
 
 stop_console.apache.bat:
 %CD%\bin\AppClose.exe %CD%\httpd.pid 
+
