@@ -26,33 +26,33 @@ typedef ULONG _PPS_POST_PROCESS_INIT_ROUTINE;
 
 // Used in PEB struct
 typedef struct MS_PEB_LDR_DATA {
-	BYTE Reserved1[8];
-	PVOID Reserved2[3];
-	LIST_ENTRY InMemoryOrderModuleList;
+    BYTE Reserved1[8];
+    PVOID Reserved2[3];
+    LIST_ENTRY InMemoryOrderModuleList;
 } msPEB_LDR_DATA, *_PPEB_LDR_DATA;
 
 // Used in PEB struct
 typedef struct MS_RTL_USER_PROCESS_PARAMETERS {
-	BYTE Reserved1[16];
-	PVOID Reserved2[10];
-	UNICODE_STRING ImagePathName;
-	UNICODE_STRING CommandLine;
+    BYTE Reserved1[16];
+    PVOID Reserved2[10];
+    UNICODE_STRING ImagePathName;
+    UNICODE_STRING CommandLine;
 } msRTL_USER_PROCESS_PARAMETERS, *_PRTL_USER_PROCESS_PARAMETERS;
 
 // struct PROCESS_BASIC_INFORMATION struct
 typedef struct MS_PEB {
-	BYTE Reserved1[2];
-	BYTE BeingDebugged;
-	BYTE Reserved2[1];
-	PVOID Reserved3[2];
-	_PPEB_LDR_DATA Ldr;
-	_PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
-	BYTE Reserved4[104];
-	PVOID Reserved5[52];
-	_PPS_POST_PROCESS_INIT_ROUTINE PostProcessInitRoutine;
-	BYTE Reserved6[128];
-	PVOID Reserved7[1];
-	ULONG SessionId;
+    BYTE Reserved1[2];
+    BYTE BeingDebugged;
+    BYTE Reserved2[1];
+    PVOID Reserved3[2];
+    _PPEB_LDR_DATA Ldr;
+    _PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
+    BYTE Reserved4[104];
+    PVOID Reserved5[52];
+    _PPS_POST_PROCESS_INIT_ROUTINE PostProcessInitRoutine;
+    BYTE Reserved6[128];
+    PVOID Reserved7[1];
+    ULONG SessionId;
 }  msPEB, *_PPEB;
 
 // Struct NtQueryInformationProcess from ntdll
@@ -67,7 +67,7 @@ typedef struct MS_PROCESS_BASIC_INFORMATION {
 
 // NtQueryInformationProcess in NTDLL.DLL
 typedef NTSTATUS (NTAPI *pfnNtQueryInformationProcess)(
-	IN	HANDLE ProcessHandle,
+    IN	HANDLE ProcessHandle,
     IN	PROCESSINFOCLASS ProcessInformationClass,
     OUT	PVOID ProcessInformation,
     IN	ULONG ProcessInformationLength,
@@ -78,16 +78,16 @@ extern pfnNtQueryInformationProcess msNtQueryInformationProcess;
 
 typedef struct MS_PROCESSINFO
 {
-	DWORD	dwPID;
-	DWORD	dwParentPID;
-	DWORD	dwSessionID;
-	DWORD	dwPEBBaseAddress;
-	DWORD	dwAffinityMask;
-	LONG	dwBasePriority;
-	LONG	dwExitStatus;
-	BYTE	cBeingDebugged;
-	TCHAR	szImgPath[MAX_UNICODE_PATH];
-	TCHAR	szCmdLine[MAX_UNICODE_PATH];
+    DWORD	dwPID;
+    DWORD	dwParentPID;
+    DWORD	dwSessionID;
+    DWORD	dwPEBBaseAddress;
+    DWORD	dwAffinityMask;
+    LONG	dwBasePriority;
+    LONG	dwExitStatus;
+    BYTE	cBeingDebugged;
+    TCHAR	szImgPath[MAX_UNICODE_PATH];
+    TCHAR	szCmdLine[MAX_UNICODE_PATH];
 } msPROCESSINFO;
 
 HMODULE MS_LoadNTDLLFunctions(void);

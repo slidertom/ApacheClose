@@ -25,79 +25,79 @@ std::wstring GetPathByPid(int32_t pid)
 
 static HWND GetHWNDFromPid(int32_t pid)
 {
-	HWND hwnd = NULL;
+    HWND hwnd = NULL;
 
-	do
-	{
-		hwnd = ::FindWindowEx(NULL, hwnd, NULL, NULL);
+    do
+    {
+        hwnd = ::FindWindowEx(NULL, hwnd, NULL, NULL);
         DWORD dwProcessID = 0;
         GetWindowThreadProcessId(hwnd, &dwProcessID);
         if ( dwProcessID == pid ) {
             return hwnd;
         }
-	} while (hwnd != NULL);
-	return NULL;
+    } while (hwnd != NULL);
+    return NULL;
 }
 
 static int32_t OnError()
 {
     printf("ERROR\n");
-	#ifdef _DEBUG
-		getchar();
-	#endif
+    #ifdef _DEBUG
+        getchar();
+    #endif
     return -1;
 }
 
 static DWORD GetPid(const char *path_to_pid)
 {
     FILE *f = ::fopen(path_to_pid, "r");
-	if (!f) {
-		printf ("File '%s' not found or locked...\n", path_to_pid);
-		return OnError();
-	}
+    if (!f) {
+        printf ("File '%s' not found or locked...\n", path_to_pid);
+        return OnError();
+    }
 
-	char str[10];
-	::fread(str, 1, 10, f);
-	::fclose(f);
-	DWORD pid = ::atoi(str);
+    char str[10];
+    ::fread(str, 1, 10, f);
+    ::fclose(f);
+    DWORD pid = ::atoi(str);
     return pid;
 }
 
 static DWORD GetParentPid(DWORD dwPID)
 {
-	DWORD dwSizeNeeded	 = 0;
-	DWORD dwPIDCount	 = 0;
+    DWORD dwSizeNeeded	 = 0;
+    DWORD dwPIDCount	 = 0;
 
-	//Get he debug Previlage 
-	if(!MS_EnableTokenPrivilege(SE_DEBUG_NAME)) {
-	//	return 0;
-	}
+    //Get he debug Previlage 
+    if(!MS_EnableTokenPrivilege(SE_DEBUG_NAME)) {
+    //	return 0;
+    }
 
     msPROCESSINFO spi = {0};
-	HMODULE hNtDll = MS_LoadNTDLLFunctions();
-	if(hNtDll) {
+    HMODULE hNtDll = MS_LoadNTDLLFunctions();
+    if(hNtDll) {
         MS_GetNtProcessInfo(dwPID, spi);
         MS_FreeNTDLLFunctions(hNtDll);
-	}
+    }
     return spi.dwParentPID;
 }
 
 int main(int argc, char* argv[])
 {
-	if (argc < 2) {
-		printf ("Please provide parameter - process PID\n");
-		printf ("  Can be number or path to the file where number is stored\n");
-		printf ("  e.g. AppClose 1234\n");
-		printf ("       AppClose c:\\path\\app.pid\n");
-		return OnError();
-	}
+    if (argc < 2) {
+        printf ("Please provide parameter - process PID\n");
+        printf ("  Can be number or path to the file where number is stored\n");
+        printf ("  e.g. AppClose 1234\n");
+        printf ("       AppClose c:\\path\\app.pid\n");
+        return OnError();
+    }
 
-	char *param = argv[1];
-	DWORD pid = ::atoi(param);
+    char *param = argv[1];
+    DWORD pid = ::atoi(param);
 
-	if (pid == 0) {
+    if (pid == 0) {
         pid = ::GetPid(param);
-	}
+    }
 
     if ( pid == -1) {
         return -1;
@@ -110,19 +110,19 @@ int main(int argc, char* argv[])
         return OnError();
     }
     std::wstring apache_exe_path = GetPathByPid(pid);
-	::wprintf(L"Path to Apache process: %s\n", apache_exe_path.c_str());
+    ::wprintf(L"Path to Apache process: %s\n", apache_exe_path.c_str());
     HWND hWnd = GetHWNDFromPid(parent_pid);
-	if (!hWnd)  {
-		printf ("HWND not found...\n");
-		return OnError();
-	}
+    if (!hWnd)  {
+        printf ("HWND not found...\n");
+        return OnError();
+    }
 
-	printf("Sending WM_CLOSE to HWND: 0x%X\n", (unsigned int)hWnd);
-	::SendMessage(hWnd, WM_CLOSE, 0, 0);
+    printf("Sending WM_CLOSE to HWND: 0x%X\n", (unsigned int)hWnd);
+    ::SendMessage(hWnd, WM_CLOSE, 0, 0);
 
-	printf("DONE\n");
-	#ifdef _DEBUG
-		getchar();
-	#endif
-	return 0;
+    printf("DONE\n");
+    #ifdef _DEBUG
+        getchar();
+    #endif
+    return 0;
 }
