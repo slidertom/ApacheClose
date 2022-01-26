@@ -42,9 +42,9 @@ static HWND GetHWNDFromPid(int32_t pid)
 static int32_t OnError()
 {
     printf("ERROR\n");
-    #ifdef _DEBUG
-        getchar();
-    #endif
+#ifdef _DEBUG
+    getchar();
+#endif
     return -1;
 }
 
@@ -70,7 +70,7 @@ static DWORD GetParentPid(DWORD dwPID)
 
     //Get he debug Previlage 
     if(!MS_EnableTokenPrivilege(SE_DEBUG_NAME)) {
-    //	return 0;
+        //	return 0;
     }
 
     msPROCESSINFO spi = {0};
@@ -84,15 +84,17 @@ static DWORD GetParentPid(DWORD dwPID)
 
 int main(int argc, char* argv[])
 {
-    if (argc < 2) {
+    if (argc < 3) {
         printf ("Please provide parameter - process PID\n");
         printf ("  Can be number or path to the file where number is stored\n");
         printf ("  e.g. AppClose 1234\n");
         printf ("       AppClose c:\\path\\app.pid\n");
+        printf ("Please provide parameter - title\n");
         return OnError();
     }
 
     char *param = argv[1];
+
     DWORD pid = ::atoi(param);
 
     if (pid == 0) {
@@ -112,9 +114,15 @@ int main(int argc, char* argv[])
     std::wstring apache_exe_path = GetPathByPid(pid);
     ::wprintf(L"Path to Apache process: %s\n", apache_exe_path.c_str());
     HWND hWnd = GetHWNDFromPid(parent_pid);
-    if (!hWnd)  {
-        printf ("HWND not found...\n");
-        return OnError();
+    if (!hWnd)  
+    {
+        printf ("HWND from parent pid not found...\n");
+        const char *sTitle = argv[2];
+        hWnd = FindWindowEx(NULL, NULL, NULL, sTitle);
+        if ( !hWnd ) {
+            printf ("HWND from title = %s not found...\n", sTitle);
+            return OnError();
+        }
     }
 
     printf("Sending WM_CLOSE to HWND: 0x%X\n", (unsigned int)hWnd);
