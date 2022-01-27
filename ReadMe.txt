@@ -3,12 +3,13 @@
 ========================================================================
 
 AppClose direct usage examples:
-  AppClose.exe 1234
-  AppClose.exe c:\path\app.pid
+  AppClose.exe 1234 caption_string
+  AppClose.exe c:\path\app.pid caption_string
 
 where 
   1234 - process pid
   c:\path\app.pid - contains 1234
+  caption_string - title string of the console window
 *************************************************************************
 Usage sample with the Apache.
 Running Apache as a Console Application 
@@ -25,5 +26,5 @@ folder structure:
 /stop_console.apache.bat
 
 stop_console.apache.bat:
-%CD%\bin\AppClose.exe %CD%\httpd.pid 
+%CD%\bin\AppClose.exe %CD%\httpd.pid  caption_string
 
