@@ -121,7 +121,13 @@ int main(int argc, char* argv[])
         hWnd = FindWindowEx(NULL, NULL, NULL, sTitle);
         if ( !hWnd ) {
             printf ("HWND from title = %s not found...\n", sTitle);
-            return OnError();
+            std::string sTitleExtended = "Administrator:  ";
+            sTitleExtended += sTitle;
+            hWnd = FindWindowEx(NULL, NULL, NULL, sTitleExtended.c_str());
+            if ( !hWnd ) {
+                printf ("HWND from extended title = %s not found...\n", sTitleExtended.c_str());
+                return OnError();
+            }
         }
     }
 
