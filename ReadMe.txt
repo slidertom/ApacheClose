@@ -1,3 +1,5 @@
+migrated into https://codeberg.org/slidertom/ApacheClose
+
 ========================================================================
        CONSOLE APPLICATION : AppClose
 ========================================================================
